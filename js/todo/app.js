@@ -1,6 +1,11 @@
 module.exports = function (alchemy) {
     'use strict';
 
+    var controller = [
+        'todo.controller.Todo',
+        'todo.controller.Storage',
+    ];
+
     /**
      * @class
      * @name todo.app
@@ -11,8 +16,9 @@ module.exports = function (alchemy) {
         'alchemy.ecs.Administrator',
         'alchemy.ecs.Apothecarius',
         'todo.ui',
+        'todo.state',
 
-    ], function (Applicatus, Administrator, Apothecarius, UI) {
+    ].concat(controller), function (Applicatus, Administrator, Apothecarius, UI, State) {
 
         return alchemy.extend(Applicatus, {
             /** @lends todo.app.prototype */
@@ -24,15 +30,21 @@ module.exports = function (alchemy) {
                 });
 
                 this.ui = UI.brew();
+                this.state = State.createAppState();
 
                 Applicatus.constructor.call(this, cfg);
 
                 this.ui.initUI(this.entityAdmin, this.messages);
+
+                alchemy.each(controller, function (name) {
+                    this.wireUp(alchemy(name));
+                }, this);
             },
 
             /** @override */
             update: function (p) {
                 this.entityAdmin.update(p.state);
+                this.messages.trigger('app:update', p);
             },
         });
     });
