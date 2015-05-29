@@ -34,7 +34,7 @@ module.exports = function (alchemy) {
 
                 Applicatus.constructor.call(this, cfg);
 
-                this.ui.initUI(this.entityAdmin, this.messages);
+                this.ui.initUI(this.entityAdmin, this.messages, this.state);
 
                 alchemy.each(controller, function (name) {
                     this.wireUp(alchemy(name));
@@ -43,8 +43,12 @@ module.exports = function (alchemy) {
 
             /** @override */
             update: function (p) {
-                this.entityAdmin.update(p.state);
                 this.messages.trigger('app:update', p);
+
+                var route = window.location.hash || '#/';
+                var state = p.state.set('route', route);
+
+                this.entityAdmin.update(state);
             },
         });
     });
