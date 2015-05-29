@@ -16,6 +16,11 @@
         onReady: function () {
             window.app = alchemy('todo.app').brew();
             window.app.launch();
+
+            window.onunload = function () {
+                window.app.dispose();
+                window.app = null;
+            };
         },
     });
 }());
