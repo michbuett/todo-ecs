@@ -1,6 +1,9 @@
 module.exports = function (alchemy) {
     'use strict';
 
+    var KEY_ENTER = 13;
+    var KEY_ESC = 27;
+
     /**
      * @class
      * @name todo.entities.Header
@@ -19,6 +22,23 @@ module.exports = function (alchemy) {
                             autofocus: true,
                         }, '')
                     ]);
+                },
+            },
+
+            events: {
+                'keydown #new-todo': function (ev, state, sendMessage) {
+                    var text = ev.target && ev.target.value;
+
+                    if (text && ev.keyCode === KEY_ENTER) {
+                        sendMessage('todo:create', {
+                            text: text
+                        });
+                        ev.target.value = '';
+                    }
+
+                    if (text && ev.keyCode === KEY_ESC) {
+                        ev.target.value = '';
+                    }
                 },
             },
         };

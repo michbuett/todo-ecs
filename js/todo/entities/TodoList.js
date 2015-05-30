@@ -52,6 +52,14 @@ module.exports = function (alchemy) {
                     ]);
                 },
             },
+
+            events: {
+                'change #toggle-all': function (e, state, sendMessage) {
+                    sendMessage('todo:updateall', {
+                        completed: !state.val('allCompleted'),
+                    });
+                },
+            },
         };
     });
 };

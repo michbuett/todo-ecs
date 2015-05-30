@@ -64,6 +64,12 @@ module.exports = function (alchemy) {
                     ]);
                 },
             },
+
+            events: {
+                'click #clear-completed': function (e, state, sendMessage) {
+                    sendMessage('todo:deletecompleted');
+                },
+            },
         };
     });
 };

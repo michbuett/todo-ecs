@@ -68,47 +68,50 @@ module.exports = function (alchemy) {
                 entityAdmin.initEntities([{
                     type: 'todo.entities.Viewport',
 
-                }, function (state) {
-                    var todos = state.val('todos');
-                    var result = {};
-
-                    for (var i = 0, l = todos.length; i < l; i++) {
-                        var todo = todos[i];
-                        var globalToLocal = {
-                            route: 'route',
-                        };
-
-                        globalToLocal['todos.' + i + '.completed'] = 'completed';
-                        globalToLocal['todos.' + i + '.editing'] = 'editing';
-                        globalToLocal['todos.' + i + '.text'] = 'text';
-
-                        result[todo.id] = {
-                            id: todo.id,
-
-                            globalToLocal: globalToLocal,
-
-                            state: {
-                                completed: todo.completed,
-                                editing: todo.editing,
-                                text: todo.text,
-                            },
-
-                            type: 'todo.entities.Todo',
-                        };
-                    }
-
-                    return result;
-
-                    // return alchemy.each(state.val('todos'), function (todo, index) {
-                    //     return {
-                    //         id: todo.id,
-
-                    //         state:
-                    //     }
-                    // });
-                }], state);
+                }, determineTodoEntities], state);
             },
         });
     });
 
+    /** @private */
+    function determineTodoEntities(state) {
+        return alchemy.each(state.val('todos'), defineTodoEntity);
+    }
+
+    /** @private */
+    function defineTodoEntity(todo, index) {
+        return {
+            id: todo.id,
+
+            type: 'todo.entities.Todo',
+
+            globalToLocal: globalToLocal,
+
+            state: {
+                completed: todo.completed,
+                editing: todo.editing,
+                text: todo.text,
+                todoId: todo.id,
+            },
+        };
+    }
+
+    /** @private */
+    function globalToLocal(appState, entityState) {
+        var todos = appState.val('todos');
+        var result = {};
+
+        for (var i = 0, l = todos.length; i < l; i++) {
+            var todo = todos[i];
+
+            if (todo.id === entityState.todoId) {
+                return {
+                    route: appState.val('route'),
+                    text: todo.text,
+                    editing: todo.editing,
+                    completed: todo.completed,
+                };
+            }
+        }
+    }
 };

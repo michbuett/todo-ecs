@@ -49,6 +49,8 @@ module.exports = function (alchemy) {
                 var state = p.state.set('route', route);
 
                 this.entityAdmin.update(state);
+
+                return state;
             },
         });
     });

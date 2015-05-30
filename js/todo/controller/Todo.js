@@ -17,40 +17,59 @@
                 'todo:create': 'createTodo',
                 'todo:update': 'updateTodo',
                 'todo:delete': 'deleteTodo',
-                'todo:deleteall': 'deletesAllTodos',
+                'todo:deletecompleted': 'deleteCompleted',
                 'todo:updateall': 'updateAllTodos',
             },
 
+            /** @private */
             updateTodo: function (state, data) {
-                return state.set('todos', state.sub('todos').set(data.index, data));
+                return state.set('todos', state.sub('todos').each(function (todo) {
+                    if (todo.val('id') === data.id) {
+                        return todo.set(data);
+                    }
+
+                    return todo;
+                }));
             },
 
+            /** @private */
             updateAllTodos: function (state, data) {
                 return state.set('todos', state.sub('todos').each(function (todo) {
                     return todo.set(data);
                 }));
             },
 
+            /** @private */
             deleteTodo: function (state, data) {
-                var todos = state.sub('todos').val();
-                todos.splice(data.index, 1);
-                return state.set('todos', todos);
+                var oldTodos = state.sub('todos').val();
+                var newTodos = [];
+
+                for (var i = 0, l = oldTodos.length; i < l; i++) {
+                    if (oldTodos[i].id !== data.id) {
+                        newTodos.push(oldTodos[i]);
+                    }
+                }
+
+                return state.set('todos', newTodos);
             },
 
-            deletesAllTodos: function (state, data) {
+            /** @private */
+            deleteCompleted: function (state, data) {
                 var allTodos = state.sub('todos').val();
                 var activeTodos = alchemy.each(allTodos, function (todo) {
                     if (!todo.completed) {
                         return todo;
                     }
                 });
+
                 return state.set('todos', activeTodos);
             },
 
+            /** @private */
             createTodo: function (state, data) {
                 var todos = state.sub('todos').val();
                 todos.push({
-                    id: alchemy.id(),
+                    id: alchemy.uuid(),
                     completed: false,
                     editing: false,
                     text: data.text

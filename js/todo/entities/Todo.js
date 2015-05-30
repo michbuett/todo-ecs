@@ -13,6 +13,7 @@ module.exports = function (alchemy) {
                 completed: false,
                 editing: false,
                 text: '',
+                todoId: '',
             },
 
             vdom: {
@@ -47,6 +48,47 @@ module.exports = function (alchemy) {
                             value: text,
                         })
                     ]);
+                }
+            },
+
+            events: {
+                'change input.toggle': function (e, state, sendMessage) {
+                    sendMessage('todo:update', {
+                        id: state.val('todoId'),
+                        completed: !state.val('completed'),
+                    });
+                },
+
+                'dblclick label': function (e, state, sendMessage) {
+                    if (state.val('completed')) {
+                        return;
+                    }
+
+                    sendMessage('todo:update', {
+                        id: state.val('todoId'),
+                        editing: true,
+                    });
+                },
+
+                'click button.destroy': function (e, state, sendMessage) {
+                    sendMessage('todo:delete', {
+                        id: state.val('todoId'),
+                    });
+                },
+
+                'change input.edit': function (e, state, sendMessage) {
+                    if (state.val('completed')) {
+                        return;
+                    }
+
+                    var newText = e && e.target && e.target.value;
+                    if (newText) {
+                        sendMessage('todo:update', {
+                            id: state.val('todoId'),
+                            text: newText,
+                            editing: false,
+                        });
+                    }
                 }
             }
         };
