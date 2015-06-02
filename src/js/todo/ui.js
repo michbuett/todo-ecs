@@ -42,7 +42,7 @@ module.exports = function (alchemy) {
                 this.delegator.dispose();
                 this.delegator = null;
 
-                MateriaPrima.dispose.call(this, cfg);
+                MateriaPrima.dispose.call(this);
             },
 
             /**
@@ -99,7 +99,6 @@ module.exports = function (alchemy) {
     /** @private */
     function globalToLocal(appState, entityState) {
         var todos = appState.val('todos');
-        var result = {};
 
         for (var i = 0, l = todos.length; i < l; i++) {
             var todo = todos[i];
