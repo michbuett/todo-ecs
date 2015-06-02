@@ -5,7 +5,7 @@
 
     alchemy.heatUp({
         path: {
-            alchemy: 'bower_components/michbuett-alchemy/lib',
+            alchemy: '../bower_components/michbuett-alchemy/lib',
             todo: 'js/todo',
         },
 
