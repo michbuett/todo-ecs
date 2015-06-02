@@ -9,8 +9,6 @@ module.exports = function (alchemy) {
 
         return {
             vdom: {
-                root: document.getElementById('todoapp'),
-
                 renderer: function (ctx) {
                     return ctx.h('section#todoapp', null, ctx.renderAllChildren());
                 },

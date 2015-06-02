@@ -67,6 +67,9 @@ module.exports = function (alchemy) {
 
                 entityAdmin.initEntities([{
                     type: 'todo.entities.Viewport',
+                    vdom: {
+                        root: document.getElementById('todoapp'),
+                    },
 
                 }, determineTodoEntities], state);
             },

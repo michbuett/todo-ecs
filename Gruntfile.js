@@ -36,7 +36,7 @@ module.exports = function (grunt) {
             },
 
             all: {
-                src: [ 'src/todo/**/*.js' ],
+                src: [ 'src/js/todo/**/*.js' ],
             },
 
             coverage: {
