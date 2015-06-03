@@ -9,6 +9,14 @@ module.exports = function (grunt) {
             tasks: {}
         },
 
+        'bower-install-simple': {
+            all: {
+                options: {
+                    color: true,
+                }
+            },
+        },
+
         jshint: {
             files: [ 'Gruntfile.js', 'src/**/*.js', 'tests/specs/**/*.js' ],
             options: {
@@ -69,11 +77,12 @@ module.exports = function (grunt) {
 
     // load grunt plugins
     grunt.loadNpmTasks('grunt-available-tasks');
+    grunt.loadNpmTasks('grunt-bower-install-simple');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
 
     // define aliases
-    grunt.registerTask('test', ['jshint', 'jasmine:all']);
+    grunt.registerTask('test', ['bower-install-simple', 'jshint', 'jasmine:all']);
     grunt.registerTask('default', ['availabletasks']);
 };
