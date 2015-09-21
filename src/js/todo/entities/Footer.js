@@ -60,7 +60,9 @@ module.exports = function (alchemy) {
                             createFilter(h, route, '#/completed', 'Completed'),
                         ]),
 
-                        h('button.clear-completed', 'Clear completed (' + numOfCompleted + ')')
+                        h('button.clear-completed', {
+                            className: numOfCompleted === 0 ? 'hidden' : '',
+                        }, 'Clear completed (' + numOfCompleted + ')')
                     ]);
                 },
             },

@@ -43,6 +43,28 @@ describe('Footer', function () {
         expect($('ul.filters > li > a[href="#/completed"]')).not.toHaveClass('selected');
     });
 
+    it('hides the "Clear completed" button if there are no completed todos', function () {
+        // prepare
+        var state = this.state.set('todos', [{
+            id: 'foo',
+            text: 'Foo',
+            completed: false,
+            editing: false,
+        }, {
+            id: 'bar',
+            text: 'Bar',
+            completed: false,
+            editing: false,
+        }]);
+
+        // execute
+        this.entityAdmin.update(state);
+
+        // verify
+        expect($('button.clear-completed')).toExist();
+        expect($('button.clear-completed')).toHaveClass('hidden');
+    });
+
     it('shows the number of complete todos', function () {
         // prepare
         var state = this.state.set('todos', [{
