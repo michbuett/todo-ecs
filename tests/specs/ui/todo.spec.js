@@ -244,8 +244,8 @@ describe('Todo', function () {
 
     function setUp() {
         setFixtures([
-            '<section id="todoapp"></section>',
-            '<footer id="info"></footer>',
+            '<section class="todoapp"></section>',
+            '<footer class="info"></footer>',
         ].join(''));
 
         /* jshint validthis: true */

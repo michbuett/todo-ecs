@@ -15,9 +15,9 @@ module.exports = function (alchemy) {
                 renderer: function (ctx) {
                     var h = ctx.h;
 
-                    return h('header#header', null, [
+                    return h('header.header', null, [
                         h('h1', null, 'todos'),
-                        h('input#new-todo', {
+                        h('input.new-todo', {
                             placeholder: 'What needs to be done?',
                             autofocus: true,
                         }, '')
@@ -26,7 +26,7 @@ module.exports = function (alchemy) {
             },
 
             events: {
-                'keydown #new-todo': function (ev, state, sendMessage) {
+                'keydown .new-todo': function (ev, state, sendMessage) {
                     var text = ev.target && ev.target.value;
 
                     if (text && ev.keyCode === KEY_ENTER) {

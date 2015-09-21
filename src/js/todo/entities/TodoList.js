@@ -36,10 +36,10 @@ module.exports = function (alchemy) {
                     var hasTodos = todos.length > 0;
                     var allCompleted = ctx.state.val('allCompleted');
 
-                    return h('#main', {
+                    return h('.main', {
                         className: hasTodos ? '' : 'hidden'
                     }, [
-                        h('input#toggle-all', {
+                        h('input.toggle-all', {
                             type: 'checkbox',
                             checked: allCompleted,
                         }),
@@ -48,13 +48,13 @@ module.exports = function (alchemy) {
                             htmlFor: 'toggle-all'
                         }, 'Mark all as complete'),
 
-                        h('ul#todo-list', null, alchemy.each(todos, ctx.placeholder, ctx))
+                        h('ul.todo-list', null, alchemy.each(todos, ctx.placeholder, ctx))
                     ]);
                 },
             },
 
             events: {
-                'change #toggle-all': function (e, state, sendMessage) {
+                'change .toggle-all': function (e, state, sendMessage) {
                     sendMessage('todo:updateall', {
                         completed: !state.val('allCompleted'),
                     });

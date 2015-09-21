@@ -10,7 +10,7 @@ module.exports = function (alchemy) {
         return {
             vdom: {
                 renderer: function (ctx) {
-                    return ctx.h('section#todoapp', null, ctx.renderAllChildren());
+                    return ctx.h('section.todoapp', null, ctx.renderAllChildren());
                 },
             },
 

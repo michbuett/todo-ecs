@@ -26,8 +26,8 @@ describe('TodoList', function () {
         this.entityAdmin.update(state);
 
         // verify
-        expect($('ul#todo-list #foo')).toExist();
-        expect($('ul#todo-list #bar')).toExist();
+        expect($('ul.todo-list #foo')).toExist();
+        expect($('ul.todo-list #bar')).toExist();
     });
 
     it('allows to complete all todos', function () {
@@ -44,7 +44,7 @@ describe('TodoList', function () {
         this.entityAdmin.update(state);
 
         // execute
-        $('input#toggle-all').click();
+        $('input.toggle-all').click();
 
         // verify
         expect(spy).toHaveBeenCalled();
@@ -53,7 +53,7 @@ describe('TodoList', function () {
         });
     });
 
-    it('checks the #toggle-all checkbox if all todos are completed', function () {
+    it('checks the .toggle-all checkbox if all todos are completed', function () {
         // prepare
         var state = this.state.set('todos', [{
             id: 'foo',
@@ -71,13 +71,13 @@ describe('TodoList', function () {
         this.entityAdmin.update(state);
 
         // verify
-        expect($('input#toggle-all')).toBeChecked();
+        expect($('input.toggle-all')).toBeChecked();
     });
 
     function setUp() {
         setFixtures([
-            '<section id="todoapp"></section>',
-            '<footer id="info"></footer>',
+            '<section class="todoapp"></section>',
+            '<footer class="info"></footer>',
         ].join(''));
 
         /* jshint validthis: true */

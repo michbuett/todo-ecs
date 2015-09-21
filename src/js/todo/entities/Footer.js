@@ -48,25 +48,25 @@ module.exports = function (alchemy) {
                     var numOfUnCompleted = state.sub('uncompleted').val();
                     var route = state.sub('route').val();
 
-                    return h('#footer', null, [
-                        h('span#todo-count', null, [
+                    return h('footer.footer', null, [
+                        h('span.todo-count', null, [
                             h('strong', null, String(numOfUnCompleted)),
                             ' item(s) left'
                         ]),
 
-                        h('ul#filters', [
+                        h('ul.filters', [
                             createFilter(h, route, '#/', 'All'),
                             createFilter(h, route, '#/active', 'Active'),
                             createFilter(h, route, '#/completed', 'Completed'),
                         ]),
 
-                        h('button#clear-completed', 'Clear completed (' + numOfCompleted + ')')
+                        h('button.clear-completed', 'Clear completed (' + numOfCompleted + ')')
                     ]);
                 },
             },
 
             events: {
-                'click #clear-completed': function (e, state, sendMessage) {
+                'click .clear-completed': function (e, state, sendMessage) {
                     sendMessage('todo:deletecompleted');
                 },
             },

@@ -14,21 +14,21 @@ describe('Header', function () {
         this.entityAdmin.update(this.state);
 
         // verify
-        expect($('header#header')).toExist();
-        expect($('input#new-todo')).toExist();
+        expect($('header.header')).toExist();
+        expect($('input.new-todo')).toExist();
     });
 
     it('allows to create new ToDos when pressing [RETURN]', function () {
         // prepare
-        var e = $.Event("keydown");
+        var e = $.Event('keydown');
         e.keyCode = 13; // [RETURN]
         var spy = jasmine.createSpy();
         this.messages.on('todo:create', spy);
         this.entityAdmin.update(this.state);
 
         // execute
-        $('#new-todo').val('test');
-        $('#new-todo').trigger(e);
+        $('.new-todo').val('test');
+        $('.new-todo').trigger(e);
 
         // verify
         expect(spy).toHaveBeenCalled();
@@ -36,25 +36,25 @@ describe('Header', function () {
 
     it('clears the input element when pressing [ESC]', function () {
         // prepare
-        var e = $.Event("keydown");
+        var e = $.Event('keydown');
         e.keyCode = 27; // # Some key code value
         var spy = jasmine.createSpy();
         this.messages.on('todo:create', spy);
         this.entityAdmin.update(this.state);
 
         // execute
-        $('#new-todo').val('test');
-        $('#new-todo').trigger(e);
+        $('.new-todo').val('test');
+        $('.new-todo').trigger(e);
 
         // verify
         expect(spy).not.toHaveBeenCalled();
-        expect($('#new-todo').val()).toBe('');
+        expect($('.new-todo').val()).toBe('');
     });
 
     function setUp() {
         setFixtures([
-            '<section id="todoapp"></section>',
-            '<footer id="info"></footer>',
+            '<section class="todoapp"></section>',
+            '<footer class="info"></footer>',
         ].join(''));
 
         /* jshint validthis: true */
