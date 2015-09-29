@@ -39,7 +39,7 @@ module.exports = function (grunt) {
             },
 
             debug: {
-                src: [ 'src/js/todo/controller/Storage.js' ],
+                src: [ 'src/js/todo/controller/*.js' ],
 
                 options: {
                     keepRunner: true,
@@ -53,7 +53,7 @@ module.exports = function (grunt) {
             },
 
             all: {
-                src: [ 'src/js/todo/controller/Storage.js' ],
+                src: [ 'src/js/todo/controller/*.js' ],
 
                 options: {
                     keepRunner: true,
