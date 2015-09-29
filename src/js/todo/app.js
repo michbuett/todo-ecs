@@ -1,57 +1,41 @@
-module.exports = function (alchemy) {
+module.exports = (function () {
     'use strict';
 
-    var controller = [
-        'todo.controller.Todo',
-        'todo.controller.Storage',
-    ];
+    var each = require('pro-singulis');
+    var immutable = require('immutabilis');
+    var Applicatus = require('alchemy.js/lib/Applicatus');
+
+    var TodoController = require('./controller/Todo');
+    var StorageController = require('./controller/Storage');
 
     /**
      * @class
      * @name todo.app
      * @extends alchemy.web.Applicatus
      */
-    alchemy.formula.define('todo.app', [
-        'alchemy.web.Applicatus',
-        'alchemy.ecs.Administrator',
-        'alchemy.ecs.Apothecarius',
-        'todo.ui',
-        'todo.state',
+    return Applicatus.extend({
+        /** @lends todo.app.prototype */
 
-    ].concat(controller), function (Applicatus, Administrator, Apothecarius, UI, State) {
+        /** @override */
+        update: function (p) {
+            this.messages.trigger('app:update', p);
 
-        return alchemy.extend(Applicatus, {
-            /** @lends todo.app.prototype */
+            var route = window.location.hash || '#/';
+            var state = p.state.set('route', route);
 
-            /** @override */
-            constructor: function (cfg) {
-                this.entityAdmin = Administrator.brew({
-                    repo: Apothecarius.brew(),
-                });
+            this.ui.update(state);
 
-                this.ui = UI.brew();
-                this.state = State.createAppState();
-
-                Applicatus.constructor.call(this, cfg);
-
-                this.ui.initUI(this.entityAdmin, this.messages, this.state);
-
-                alchemy.each(controller, function (name) {
-                    this.wireUp(alchemy(name));
-                }, this);
-            },
-
-            /** @override */
-            update: function (p) {
-                this.messages.trigger('app:update', p);
-
-                var route = window.location.hash || '#/';
-                var state = p.state.set('route', route);
-
-                this.entityAdmin.update(state);
-
-                return state;
-            },
+            return state;
+        },
+    }).whenBrewed(function () {
+        this.state = immutable.fromJS({
+            route: '#/',
+            todos: []
         });
+
+        each([
+            StorageController.brew(),
+            TodoController.brew(),
+        ], this.wireUp, this);
     });
-};
+}());

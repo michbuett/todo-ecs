@@ -53,7 +53,11 @@ module.exports = function (grunt) {
             },
 
             all: {
-                src: [ 'src/js/todo/controller/*.js' ],
+                src: [
+                    'src/js/todo/controller/*.js',
+                    'src/js/todo/app.js',
+                    'src/js/todo/state.js',
+                ],
 
                 options: {
                     keepRunner: true,
@@ -61,7 +65,10 @@ module.exports = function (grunt) {
                         'tests/vendor/jquery-2.0.3.js',
                         'tests/vendor/jasmine-jquery.js',
                     ],
-                    specs: 'tests/specs/controller/*.js',
+                    specs: [
+                        'tests/specs/controller/*.js',
+                        'tests/specs/app.spec.js',
+                    ],
                     template: require('grunt-template-jasmine-istanbul'),
                     templateOptions: {
                         template: require('grunt-template-jasmine-nml'),
