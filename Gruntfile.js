@@ -18,7 +18,6 @@ module.exports = function (grunt) {
 
         jasmine: {
             options: {
-                display: 'short',
                 keepRunner: true,
                 summary: true,
                 specs: [
@@ -35,8 +34,62 @@ module.exports = function (grunt) {
                 ],
             },
 
-            all: {
+            old: {
                 src: [ 'src/js/todo/**/*.js' ],
+            },
+
+            debug: {
+                src: [ 'src/js/todo/controller/Storage.js' ],
+
+                options: {
+                    keepRunner: true,
+                    vendor: [
+                        'tests/vendor/jquery-2.0.3.js',
+                        'tests/vendor/jasmine-jquery.js',
+                    ],
+                    specs: 'tests/specs/controller/*.js',
+                    template: require('grunt-template-jasmine-nml'),
+                }
+            },
+
+            all: {
+                src: [ 'src/js/todo/controller/Storage.js' ],
+
+                options: {
+                    keepRunner: true,
+                    vendor: [
+                        'tests/vendor/jquery-2.0.3.js',
+                        'tests/vendor/jasmine-jquery.js',
+                    ],
+                    specs: 'tests/specs/controller/*.js',
+                    template: require('grunt-template-jasmine-istanbul'),
+                    templateOptions: {
+                        template: require('grunt-template-jasmine-nml'),
+                        templateOptions: {
+                            pathmap: {
+                                'src/': '.grunt/grunt-contrib-jasmine/src/',
+                            }
+                        },
+                        coverage: 'reports/coverage/coverage.json',
+                        report: [{
+                            type: 'html',
+                            options: {
+                                dir: 'reports/coverage/html',
+                            }
+                        }, {
+                            type: 'lcovonly',
+                            options: {
+                                dir: 'reports/coverage/lcov',
+                            }
+                        }],
+                        thresholds: {
+                            lines: 95,
+                            statements: 95,
+                            branches: 95,
+                            functions: 95
+                        },
+                    }
+                },
             },
 
             coverage: {
@@ -60,7 +113,7 @@ module.exports = function (grunt) {
 
         watch: {
             jshint: {
-                files: ['**/*.js'],
+                files: ['Gruntfile.js', 'src/**/*', 'tests/**/*'],
                 tasks: ['jshint', 'jasmine:all'],
             },
         },

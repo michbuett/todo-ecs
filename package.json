@@ -19,7 +19,9 @@
     "grunt-template-jasmine-nml": "^1.2.0"
   },
   "dependencies": {
-    "alchemy.js": "0.4.*",
+    "alchemy.js": "1.0.*",
+    "coquo-venenum": "^1.1.1",
+    "immutabilis": "^2.0.3",
     "todomvc-app-css": "^2.0.0",
     "todomvc-common": "^1.0.0"
   },
