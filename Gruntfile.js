@@ -9,14 +9,6 @@ module.exports = function (grunt) {
             tasks: {}
         },
 
-        'bower-install-simple': {
-            all: {
-                options: {
-                    color: true,
-                }
-            },
-        },
-
         jshint: {
             files: [ 'Gruntfile.js', 'src/**/*.js', 'tests/specs/**/*.js' ],
             options: {
@@ -33,13 +25,13 @@ module.exports = function (grunt) {
                     'tests/specs/**/*.spec.js'
                 ],
                 vendor: [
-                    'bower_components/michbuett-alchemy/lib/core/Alchemy.js',
-                    'bower_components/michbuett-alchemy/lib/core/**/*.js',
-                    'bower_components/michbuett-alchemy/lib/web/**/*.js',
-                    'bower_components/michbuett-alchemy/lib/ecs/**/*.js',
-                    'bower_components/michbuett-alchemy/lib/vendor/**/*.js',
                     'tests/vendor/jquery-2.0.3.js',
                     'tests/vendor/jasmine-jquery.js',
+                    'node_modules/alchemy.js/lib/core/Alchemy.js',
+                    'node_modules/alchemy.js/lib/core/**/*.js',
+                    'node_modules/alchemy.js/lib/web/**/*.js',
+                    'node_modules/alchemy.js/lib/ecs/**/*.js',
+                    'node_modules/alchemy.js/lib/vendor/**/*.js',
                 ],
             },
 
@@ -77,12 +69,11 @@ module.exports = function (grunt) {
 
     // load grunt plugins
     grunt.loadNpmTasks('grunt-available-tasks');
-    grunt.loadNpmTasks('grunt-bower-install-simple');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
 
     // define aliases
-    grunt.registerTask('test', ['bower-install-simple', 'jshint', 'jasmine:all']);
     grunt.registerTask('default', ['availabletasks']);
+    grunt.registerTask('test', ['jshint', 'jasmine:all']);
 };

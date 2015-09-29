@@ -1,5 +1,4 @@
 .grunt/
-bower_components/
 node_modules/
 reports/
 _SpecRunner.html
