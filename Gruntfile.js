@@ -96,6 +96,15 @@ module.exports = function (grunt) {
                 tasks: ['jshint', 'jasmine:all'],
             },
         },
+
+        coveralls: {
+            travis: {
+                src: 'reports/coverage/lcov/*.info',
+                options: {
+                    force: true,
+                }
+            }
+        },
     });
 
 
@@ -104,6 +113,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks('grunt-coveralls');
 
     // define aliases
     grunt.registerTask('default', ['availabletasks']);
