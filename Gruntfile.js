@@ -18,57 +18,29 @@ module.exports = function (grunt) {
 
         jasmine: {
             options: {
-                keepRunner: true,
                 summary: true,
-                specs: [
-                    'tests/specs/**/*.spec.js'
-                ],
                 vendor: [
                     'tests/vendor/jquery-2.0.3.js',
                     'tests/vendor/jasmine-jquery.js',
-                    'node_modules/alchemy.js/lib/core/Alchemy.js',
-                    'node_modules/alchemy.js/lib/core/**/*.js',
-                    'node_modules/alchemy.js/lib/web/**/*.js',
-                    'node_modules/alchemy.js/lib/ecs/**/*.js',
-                    'node_modules/alchemy.js/lib/vendor/**/*.js',
+                ],
+                specs: [
+                    'tests/specs/**/*.js',
                 ],
             },
 
-            old: {
-                src: [ 'src/js/todo/**/*.js' ],
-            },
-
             debug: {
-                src: [ 'src/js/todo/controller/*.js' ],
+                src: [ 'src/js/todo/**/*.js' ],
 
                 options: {
                     keepRunner: true,
-                    vendor: [
-                        'tests/vendor/jquery-2.0.3.js',
-                        'tests/vendor/jasmine-jquery.js',
-                    ],
-                    specs: 'tests/specs/controller/*.js',
                     template: require('grunt-template-jasmine-nml'),
                 }
             },
 
             all: {
-                src: [
-                    'src/js/todo/controller/*.js',
-                    'src/js/todo/app.js',
-                    'src/js/todo/state.js',
-                ],
+                src: [ 'src/js/todo/**/*.js' ],
 
                 options: {
-                    keepRunner: true,
-                    vendor: [
-                        'tests/vendor/jquery-2.0.3.js',
-                        'tests/vendor/jasmine-jquery.js',
-                    ],
-                    specs: [
-                        'tests/specs/controller/*.js',
-                        'tests/specs/app.spec.js',
-                    ],
                     template: require('grunt-template-jasmine-istanbul'),
                     templateOptions: {
                         template: require('grunt-template-jasmine-nml'),

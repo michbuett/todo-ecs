@@ -7,6 +7,7 @@ module.exports = (function () {
 
     var TodoController = require('./controller/Todo');
     var StorageController = require('./controller/Storage');
+    var UI = require('./ui');
 
     /**
      * @class
@@ -15,6 +16,11 @@ module.exports = (function () {
      */
     return Applicatus.extend({
         /** @lends todo.app.prototype */
+
+        /** @override */
+        onLaunch: function () {
+            this.ui.init(this.state);
+        },
 
         /** @override */
         update: function (p) {
@@ -31,6 +37,10 @@ module.exports = (function () {
         this.state = immutable.fromJS({
             route: '#/',
             todos: []
+        });
+
+        this.ui = UI.brew({
+            messages: this.messages,
         });
 
         each([

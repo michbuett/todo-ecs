@@ -1,8 +1,11 @@
 /* global $ */
-describe('Header', function () {
+describe('todo.ui (Header)', function () {
     'use strict';
 
-    var alchemy = require('Alchemy.JS');
+    var immutable = require('immutabilis');
+    var Observari = require('alchemy.js/lib/Observari');
+
+    var UI = require('../../../src/js/todo/ui');
 
     beforeEach(setUp);
 
@@ -11,7 +14,7 @@ describe('Header', function () {
     it('contains all required elements', function () {
         // prepare
         // execute
-        this.entityAdmin.update(this.state);
+        this.ui.update(this.state);
 
         // verify
         expect($('header.header')).toExist();
@@ -24,7 +27,7 @@ describe('Header', function () {
         e.keyCode = 13; // [RETURN]
         var spy = jasmine.createSpy();
         this.messages.on('todo:create', spy);
-        this.entityAdmin.update(this.state);
+        this.ui.update(this.state);
 
         // execute
         $('.new-todo').val('test');
@@ -40,7 +43,7 @@ describe('Header', function () {
         e.keyCode = 27; // # Some key code value
         var spy = jasmine.createSpy();
         this.messages.on('todo:create', spy);
-        this.entityAdmin.update(this.state);
+        this.ui.update(this.state);
 
         // execute
         $('.new-todo').val('test');
@@ -58,34 +61,29 @@ describe('Header', function () {
         ].join(''));
 
         /* jshint validthis: true */
-        this.messages = alchemy('alchemy.core.Observari').brew();
+        this.messages = Observari.brew();
 
-        this.entityRepo = alchemy('alchemy.ecs.Apothecarius').brew();
-
-        this.entityAdmin = alchemy('alchemy.ecs.Administrator').brew({
-            repo: this.entityRepo,
-        });
-
-        this.state = alchemy('Immutatio').makeImmutable({
+        this.state = immutable.fromJS({
             route: '#/',
             todos: [],
         });
 
-        this.ui = alchemy('todo.ui').brew();
-        this.ui.initUI(this.entityAdmin, this.messages, this.state);
+        this.ui = UI.brew({
+            messages: this.messages,
+        });
+
+        this.ui.init(this.state);
         /* jshint validthis: false */
     }
 
 
     function tearDown() {
         /* jshint validthis: true */
-        alchemy.each(['messages', 'entityRepo', 'entityAdmin', 'state', 'ui'], function (prop) {
-            if (typeof this[prop].dispose === 'function') {
-                this[prop].dispose();
-            }
-
-            this[prop] = null;
-        }, this);
+        this.ui.dispose();
+        this.messages.dispose();
+        this.ui = null;
+        this.state = null;
+        this.messages = null;
         /* jshint validthis: false */
     }
 });

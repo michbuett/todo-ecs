@@ -1,84 +1,77 @@
-module.exports = function (alchemy) {
+module.exports = (function () {
     'use strict';
 
-    var systems = [
-        'alchemy.ecs.StateSystem',
-        'alchemy.ecs.EventSystem',
-        'alchemy.ecs.VDomRenderSystem',
-        'alchemy.ecs.CssRenderSystem',
-    ];
+    var coquoVenenum = require('coquo-venenum');
+    var each = require('pro-singulis');
 
-    var entityTypes = [
-        'todo.entities.Viewport',
-        'todo.entities.Header',
-        'todo.entities.TodoList',
-        'todo.entities.Todo',
-        'todo.entities.Footer',
-    ];
+    var Delegatus = require('alchemy.js/lib/Delegatus');
+    var Administrator = require('alchemy.js/lib/Administrator');
+    var Apothecarius = require('alchemy.js/lib/Apothecarius');
+    var StateSystem = require('alchemy.js/lib/StateSystem');
+    var EventSystem = require('alchemy.js/lib/EventSystem');
+    var VDomRenderSystem = require('alchemy.js/lib/VDomRenderSystem');
 
-    /**
-     * @class
-     * @name todo.ui
-     * @extends alchemy.core.MateriaPrima
-     */
-    alchemy.formula.define('todo.ui', [
-        'alchemy.core.MateriaPrima',
-        'alchemy.web.Delegatus',
+    var Viewport = require('./entities/Viewport');
+    var Header = require('./entities/Header');
+    var TodoList = require('./entities/TodoList');
+    var Todo = require('./entities/Todo');
+    var Footer = require('./entities/Footer');
 
-    ].concat(systems, entityTypes), function (MateriaPrima, Delegatus) {
+    return coquoVenenum({
 
-        return alchemy.extend(MateriaPrima, {
-            /** @lends todo.ui.prototype */
+        messages: undefined,
 
-            /** @override */
-            constructor: function (cfg) {
-                this.delegator = Delegatus.brew();
+        admin: undefined,
 
-                MateriaPrima.constructor.call(this, cfg);
-            },
+        delegator: undefined,
 
-            /** @override */
-            dispose: function () {
-                this.delegator.dispose();
-                this.delegator = null;
+        init: function (state) {
+            // register UI relevant systems
+            each([
+                StateSystem,
+                EventSystem,
+                VDomRenderSystem,
+            ], function (system) {
+                this.admin.addSystem(system.brew({
+                    delegator: this.delegator,
+                    messages: this.messages,
+                }));
+            }, this);
 
-                MateriaPrima.dispose.call(this);
-            },
+            // register entity types
+            each({
+                'todo.entities.Viewport': Viewport,
+                'todo.entities.Header': Header,
+                'todo.entities.TodoList': TodoList,
+                'todo.entities.Todo': Todo,
+                'todo.entities.Footer': Footer,
+            }, function (defaultValues, entity) {
+                this.admin.setEntityDefaults(entity, defaultValues);
+            }, this);
 
-            /**
-             * @param alchemy.ecs.Administrator entityAdmin
-             * @param alchemy.core.Observari
-             * @param Immuatble state
-             */
-            initUI: function (entityAdmin, appMsgBus, state) {
+            this.admin.initEntities([{
+                type: 'todo.entities.Viewport',
+                vdom: {
+                    root: document.querySelector('.todoapp'),
+                },
 
-                // register UI relevant systems
-                alchemy.each(systems, function (name) {
-                   entityAdmin.addSystem(alchemy(name).brew({
-                        delegator: this.delegator,
-                        messages: appMsgBus,
-                    }));
-                }, this);
+            }, determineTodoEntities], state);
+        },
 
-                // register entity types
-                alchemy.each(entityTypes, function (name) {
-                    entityAdmin.setEntityDefaults(name, alchemy(name));
-                }, this);
+        update: function (state) {
+            return this.admin.update(state);
+        },
 
-                entityAdmin.initEntities([{
-                    type: 'todo.entities.Viewport',
-                    vdom: {
-                        root: document.querySelector('.todoapp'),
-                    },
-
-                }, determineTodoEntities], state);
-            },
+    }).whenBrewed(function () {
+        this.delegator = Delegatus.brew();
+        this.admin = Administrator.brew({
+            repo: Apothecarius.brew()
         });
     });
 
     /** @private */
     function determineTodoEntities(state) {
-        return alchemy.each(state.val('todos'), defineTodoEntity);
+        return each(state.val('todos'), defineTodoEntity);
     }
 
     /** @private */
@@ -116,4 +109,4 @@ module.exports = function (alchemy) {
             }
         }
     }
-};
+}());
