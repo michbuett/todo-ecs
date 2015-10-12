@@ -9,6 +9,9 @@ module.exports = function (grunt) {
             tasks: {}
         },
 
+        ///////////////////////////////////////////////////////////////////////
+        // TESTS
+        //
         jshint: {
             files: [ 'Gruntfile.js', 'src/**/*.js', 'tests/specs/**/*.js' ],
             options: {
@@ -91,9 +94,9 @@ module.exports = function (grunt) {
         },
 
         watch: {
-            jshint: {
+            src: {
                 files: ['Gruntfile.js', 'src/**/*', 'tests/**/*'],
-                tasks: ['jshint', 'jasmine:all'],
+                tasks: ['test'],
             },
         },
 
@@ -105,17 +108,74 @@ module.exports = function (grunt) {
                 }
             }
         },
-    });
 
+        ///////////////////////////////////////////////////////////////////////
+        // BUILD
+        //
+        clean: {
+            dist: [ 'tmp/*', 'build/*' ],
+        },
+
+        browserify: {
+            dist: {
+                src: [
+                    'src/js/init.js',
+                ],
+                dest: 'tmp/app.js',
+                options: {
+                    browserifyOptions: {
+                        debug: false,
+                    },
+                }
+            },
+        },
+
+        uglify: {
+            dist: {
+                files: {
+                    'build/js/app.min.js': [ 'tmp/**/*.js' ]
+                }
+            },
+        },
+
+        copy: {
+            dist: {
+                files: [{
+                    src: ['src/index.html'],
+                    dest: 'build/',
+                    expand: true,
+                    flatten: true,
+                }, {
+                    src: [
+                        'node_modules/todomvc-common/base.css',
+                        'node_modules/todomvc-app-css/index.css',
+                    ],
+                    dest: 'build/css/',
+                    expand: true,
+                    flatten: true,
+                }, {
+                    src: [ 'node_modules/todomvc-common/base.js', ],
+                    dest: 'build/js/',
+                    expand: true,
+                    flatten: true,
+                }]
+            },
+        },
+    });
 
     // load grunt plugins
     grunt.loadNpmTasks('grunt-available-tasks');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-coveralls');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-browserify');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
     // define aliases
     grunt.registerTask('default', ['availabletasks']);
     grunt.registerTask('test', ['jshint', 'jasmine:all']);
+    grunt.registerTask('build', ['test', 'clean', 'browserify', 'uglify', 'copy']);
 };

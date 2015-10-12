@@ -1,27 +1,15 @@
 (function () {
     'use strict';
 
-    var alchemy = require('alchemy');
+    var App = require('./todo/app');
 
-    alchemy.heatUp({
-        path: {
-            alchemy: '../bower_components/michbuett-alchemy/lib',
-            todo: 'js/todo',
-        },
+    window.onload = function onLoad() {
+        window.app = App.brew();
+        window.app.launch();
+    };
 
-        require: [
-            'todo.app',
-        ],
-
-        onReady: function () {
-            window.app = alchemy('todo.app').brew();
-            window.app.launch();
-
-            window.onunload = function () {
-                window.app.dispose();
-                window.app = null;
-            };
-        },
-    });
+    window.onunload = function onUnload() {
+        window.app.dispose();
+        window.app = null;
+    };
 }());
-

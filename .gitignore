@@ -1,4 +1,6 @@
 .grunt/
+build/
 node_modules/
 reports/
+tmp/
 _SpecRunner.html
