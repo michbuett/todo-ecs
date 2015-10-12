@@ -6,16 +6,16 @@ The [TodoMVC](http://todomvc.com/) example build with data-driven techniques usi
 
 ## How do I get it to work
 1. Get the sources
-```
-git clone https://github.com/michbuett/todo-ecs.git
-```
+    ```
+    git clone https://github.com/michbuett/todo-ecs.git
+    ```
 2. Get the dependencies
-```
-cd todo-ecs
-npm install
-```
+    ```
+    cd todo-ecs && npm install
+    ```
 3. Build it
-```
-grunt build
-```
-After completing these steps there should be a "build" directory containing the index.html
+    ```
+    grunt build
+    ```
+
+After completing these steps there should be a `build` directory containing the `index.html`.
