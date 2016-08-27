@@ -2,7 +2,8 @@ module.exports = (function () {
     'use strict';
 
     var utils = require('alchemy.js/lib/Utils');
-    var immutable = require('immutabilis');
+    // var immutable = require('immutabilis');
+    var h = require('virtual-dom/h');
 
     function createFilter(h, currentRoute, filterRoute, text) {
         var selected = (currentRoute === filterRoute);
@@ -20,48 +21,35 @@ module.exports = (function () {
          */
         return utils.melt({
 
-            vdom: {
-                stateMap: function (appState) {
-                    var completed = 0;
-                    var todos = appState.val('todos');
+            vdom_ng: function (state, entity) {
+                var numOfCompleted = 0;
+                var todos = state.val('todos');
 
-                    for (var i = 0, l = todos.length; i < l; i++) {
-                        if (todos[i].completed) {
-                            completed++;
-                        }
+                for (var i = 0, l = todos.length; i < l; i++) {
+                    if (todos[i].completed) {
+                        numOfCompleted++;
                     }
+                }
 
-                    return immutable.fromJS({
-                        completed: completed,
-                        uncompleted: todos.length - completed,
-                        route: appState.val('route'),
-                    });
-                },
+                var numOfUnCompleted = todos.length - numOfCompleted;
+                var route = state.sub('route').val();
 
-                renderer: function (ctx) {
-                    var h = ctx.h;
-                    var state = ctx.state;
-                    var numOfCompleted = state.sub('completed').val();
-                    var numOfUnCompleted = state.sub('uncompleted').val();
-                    var route = state.sub('route').val();
+                return h('footer.footer', null, [
+                    h('span.todo-count', null, [
+                        h('strong', null, String(numOfUnCompleted)),
+                        ' item(s) left'
+                    ]),
 
-                    return h('footer.footer', null, [
-                        h('span.todo-count', null, [
-                            h('strong', null, String(numOfUnCompleted)),
-                            ' item(s) left'
-                        ]),
+                    h('ul.filters', [
+                        createFilter(h, route, '#/', 'All'),
+                        createFilter(h, route, '#/active', 'Active'),
+                        createFilter(h, route, '#/completed', 'Completed'),
+                    ]),
 
-                        h('ul.filters', [
-                            createFilter(h, route, '#/', 'All'),
-                            createFilter(h, route, '#/active', 'Active'),
-                            createFilter(h, route, '#/completed', 'Completed'),
-                        ]),
-
-                        h('button.clear-completed', {
-                            className: numOfCompleted === 0 ? 'hidden' : '',
-                        }, 'Clear completed (' + numOfCompleted + ')')
-                    ]);
-                },
+                    h('button.clear-completed', {
+                        className: numOfCompleted === 0 ? 'hidden' : '',
+                    }, 'Clear completed (' + numOfCompleted + ')')
+                ]);
             },
 
             events: {

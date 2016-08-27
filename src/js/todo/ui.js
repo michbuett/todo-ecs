@@ -9,6 +9,7 @@ module.exports = (function () {
     var Apothecarius = require('alchemy.js/lib/Apothecarius');
     var EventSystem = require('alchemy.js/lib/EventSystem');
     var VDomRenderSystem = require('alchemy.js/lib/VDomRenderSystem');
+    var VDomRenderSystemNG = require('alchemy.js/lib/VDomRenderSystemNG');
 
     var viewport = require('./entities/Viewport');
 
@@ -31,6 +32,15 @@ module.exports = (function () {
                 }));
             }, this);
 
+            each([
+                VDomRenderSystemNG,
+            ], function (system) {
+                this.admin.addSystemNG(system.brew({
+                    delegator: this.delegator,
+                    messages: this.messages,
+                }));
+            }, this);
+
             this.admin.initEntities([viewport({
                 vdom: {
                     root: document.querySelector('.todoapp'),
@@ -39,7 +49,7 @@ module.exports = (function () {
         },
 
         update: function (state) {
-            return this.admin.update(state);
+            this.admin.update(state);
         },
 
     }).whenBrewed(function () {
