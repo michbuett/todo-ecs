@@ -36,7 +36,9 @@ module.exports = (function () {
     }).whenBrewed(function () {
         this.state = immutable.fromJS({
             route: '#/',
-            todos: []
+            todos: [],
+            numOfCompleted: 0,
+            numOfUnCompleted: 0,
         });
 
         this.ui = UI.brew({

@@ -1,25 +1,33 @@
 module.exports = (function () {
     'use strict';
 
-    var utils = require('alchemy.js/lib/Utils');
     var header = require('./Header');
     var todoList = require('./TodoList');
     var footer = require('./Footer');
+    var h = require('virtual-dom/h');
+    var vdom = h('section.todoapp', null, [
+        h('#header'), h('#todos'), h('#footer'),
+    ]);
 
-    return function Viewport(cfg) {
+    return function viewport(state) {
 
-        /**
-         * @class
-         * @name todo.entities.Viewport
-         */
-        return utils.melt({
-            vdom: {
-                renderer: function (ctx) {
-                    return ctx.h('section.todoapp', null, ctx.renderAllChildren());
-                },
-            },
+        return {
+            id: 'viewport',
 
-            children: [ header(), todoList(), footer(), ],
-        }, cfg);
+            vdom_ng: vdom,
+
+            children: [
+                header('header'),
+
+                todoList('todos', state.sub('todos'), state.sub('route')),
+
+                footer(
+                    'footer',
+                    state.sub('numOfCompleted'),
+                    state.sub('numOfUnCompleted'),
+                    state.sub('route')
+                )
+            ],
+        };
     };
 }());

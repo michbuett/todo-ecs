@@ -1,71 +1,63 @@
 module.exports = (function () {
     'use strict';
 
-    var each = require('pro-singulis');
-    var immutable = require('immutabilis');
+    var h = require('virtual-dom/h');
     var todo = require('./Todo');
-    var utils = require('alchemy.js/lib/Utils');
 
-    return function TodoList(cfg) {
+    return function todoList(id, todos, route) {
+        todos = todos.val();
+
+        var allCompleted = todos.reduce(andCompleted, true);
+        var hasTodos = todos.length > 0;
 
         /**
          * @class
          * @name todo.entities.TodoList
          */
-        return utils.melt({
+        return {
+            id: id,
 
-            vdom: {
-                stateMap: function (appState) {
-                    var todos = appState.val('todos');
-                    var allCompleted = true;
-
-                    for (var i = 0, l = todos.length; i < l; i++) {
-                        allCompleted = allCompleted && todos[i].completed;
-                    }
-
-                    return immutable.fromJS({
-                        hasTodos: todos.length > 0,
-                        allCompleted: allCompleted,
-                    });
-                },
-
-                renderer: function (ctx) {
-                    var h = ctx.h;
-                    var hasTodos = ctx.state.val('hasTodos');
-                    var allCompleted = ctx.state.val('allCompleted');
-
-                    return h('.main', {
-                        className: hasTodos ? '' : 'hidden'
-                    }, [
-                        h('input.toggle-all', {
-                            type: 'checkbox',
-                            checked: allCompleted,
-                        }),
-
-                        h('label', {
-                            htmlFor: 'toggle-all'
-                        }, 'Mark all as complete'),
-
-                        h('ul.todo-list', null, ctx.renderAllChildren())
-                    ]);
-                },
-            },
+            vdom_ng: renderListVdom(hasTodos, allCompleted, todos),
 
             events: {
-                'change .toggle-all': function (e, state, sendMessage) {
+                'change .toggle-all': function (e, sendMessage) {
                     sendMessage('todo:updateall', {
-                        completed: !state.val('allCompleted'),
+                        completed: !allCompleted,
                     });
                 },
             },
 
-            children: function (state) {
-                return each(state.val('todos'), function (t) {
-                    return todo({
-                        id: t.id
-                    });
-                });
-            }
-        }, cfg || {});
+            children: todos.map(function (t) {
+                return todo(t, route.val());
+            }),
+        };
     };
+
+    /** @private */
+    function andCompleted(allCompleted, todo) {
+        return allCompleted && todo.completed;
+    }
+
+    /** @private */
+    function renderListVdom(hasTodos, allCompleted, todos) {
+        return h('.main', {
+            className: hasTodos ? '' : 'hidden'
+        }, [
+            h('input.toggle-all', {
+                type: 'checkbox',
+                checked: allCompleted,
+            }),
+
+            h('label', {
+                htmlFor: 'toggle-all'
+            }, 'Mark all as complete'),
+
+            h('ul.todo-list', null, todos.map(renderTodoVdom))
+        ]);
+    }
+
+    /** @private */
+    function renderTodoVdom(todo) {
+        return h('#' + todo.id);
+    }
 }());

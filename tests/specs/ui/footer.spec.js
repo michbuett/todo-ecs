@@ -13,17 +13,7 @@ describe('todo.ui (Footer)', function () {
 
     it('shows the number of uncomplete todos', function () {
         // prepare
-        var state = this.state.set('todos', [{
-            id: 'foo',
-            text: 'Foo',
-            completed: false,
-            editing: false,
-        }, {
-            id: 'bar',
-            text: 'Bar',
-            completed: false,
-            editing: false,
-        }]);
+        var state = this.state.set('numOfUnCompleted', 2);
 
         // execute
         this.ui.update(state);
@@ -48,17 +38,7 @@ describe('todo.ui (Footer)', function () {
 
     it('hides the "Clear completed" button if there are no completed todos', function () {
         // prepare
-        var state = this.state.set('todos', [{
-            id: 'foo',
-            text: 'Foo',
-            completed: false,
-            editing: false,
-        }, {
-            id: 'bar',
-            text: 'Bar',
-            completed: false,
-            editing: false,
-        }]);
+        var state = this.state;
 
         // execute
         this.ui.update(state);
@@ -70,17 +50,7 @@ describe('todo.ui (Footer)', function () {
 
     it('shows the number of complete todos', function () {
         // prepare
-        var state = this.state.set('todos', [{
-            id: 'foo',
-            text: 'Foo',
-            completed: true,
-            editing: false,
-        }, {
-            id: 'bar',
-            text: 'Bar',
-            completed: true,
-            editing: false,
-        }]);
+        var state = this.state.set('numOfCompleted', 2);
 
         // execute
         this.ui.update(state);
@@ -105,7 +75,7 @@ describe('todo.ui (Footer)', function () {
 
     function setUp() {
         setFixtures([
-            '<section class="todoapp"></section>',
+            '<section id="viewport" class="todoapp"></section>',
             '<footer class="info"></footer>',
         ].join(''));
 
@@ -115,6 +85,8 @@ describe('todo.ui (Footer)', function () {
         this.state = immutable.fromJS({
             route: '#/',
             todos: [],
+            numOfCompleted: 0,
+            numOfUnCompleted: 0,
         });
 
         this.ui = UI.brew({

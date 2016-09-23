@@ -247,7 +247,7 @@ describe('todo.ui (Todo)', function () {
 
     function setUp() {
         setFixtures([
-            '<section class="todoapp"></section>',
+            '<section id="viewport" class="todoapp"></section>',
             '<footer class="info"></footer>',
         ].join(''));
 
@@ -257,6 +257,8 @@ describe('todo.ui (Todo)', function () {
         this.state = immutable.fromJS({
             route: '#/',
             todos: [],
+            numOfCompleted: 0,
+            numOfUnCompleted: 0,
         });
 
         this.ui = UI.brew({

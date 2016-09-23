@@ -22,20 +22,20 @@ module.exports = (function () {
 
         /** @private */
         updateTodo: function (state, data) {
-            return state.set('todos', state.sub('todos').each(function (todo) {
+            return updateCompleted(state.set('todos', state.sub('todos').each(function (todo) {
                 if (todo.val('id') === data.id) {
                     return todo.set(data);
                 }
 
                 return todo;
-            }));
+            })));
         },
 
         /** @private */
         updateAllTodos: function (state, data) {
-            return state.set('todos', state.sub('todos').each(function (todo) {
+            return updateCompleted(state.set('todos', state.sub('todos').each(function (todo) {
                 return todo.set(data);
-            }));
+            })));
         },
 
         /** @private */
@@ -49,7 +49,7 @@ module.exports = (function () {
                 }
             }
 
-            return state.set('todos', newTodos);
+            return updateCompleted(state.set('todos', newTodos));
         },
 
         /** @private */
@@ -61,7 +61,7 @@ module.exports = (function () {
                 }
             });
 
-            return state.set('todos', activeTodos);
+            return updateCompleted(state.set('todos', activeTodos));
         },
 
         /** @private */
@@ -74,8 +74,25 @@ module.exports = (function () {
                 text: data.text
             });
 
-            return state.set('todos', todos);
+            return updateCompleted(state.set('todos', todos));
         },
     });
+
+
+    function updateCompleted(state) {
+        var todos = state.val('todos');
+        var numOfCompleted = 0;
+
+        for (var i = 0; i < todos.length; i++) {
+            if (todos[i].completed) {
+                numOfCompleted++;
+            }
+        }
+
+        return state.set({
+            numOfCompleted: numOfCompleted,
+            numOfUnCompleted: todos.length - numOfCompleted,
+        });
+    }
 }());
 

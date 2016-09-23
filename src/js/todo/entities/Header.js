@@ -3,45 +3,39 @@ module.exports = (function () {
 
     var KEY_ENTER = 13;
     var KEY_ESC = 27;
-    var utils = require('alchemy.js/lib/Utils');
 
-    return function TodoList(cfg) {
+    var h = require('virtual-dom/h');
 
-        /**
-         * @class
-         * @name todo.entities.Header
-         */
-        return utils.melt({
-            vdom: {
-                renderer: function (ctx) {
-                    var h = ctx.h;
+    var vdom = h('header.header', null, [
+        h('h1', null, 'todos'),
+        h('input.new-todo', {
+            placeholder: 'What needs to be done?',
+            autofocus: true,
+        }, '')
+    ]);
 
-                    return h('header.header', null, [
-                        h('h1', null, 'todos'),
-                        h('input.new-todo', {
-                            placeholder: 'What needs to be done?',
-                            autofocus: true,
-                        }, '')
-                    ]);
-                },
-            },
+    var events = {
+        'keydown .new-todo': function (ev, sendMessage) {
+            var text = ev.target && ev.target.value;
 
-            events: {
-                'keydown .new-todo': function (ev, state, sendMessage) {
-                    var text = ev.target && ev.target.value;
+            if (text && ev.keyCode === KEY_ENTER) {
+                sendMessage('todo:create', {
+                    text: text
+                });
+                ev.target.value = '';
+            }
 
-                    if (text && ev.keyCode === KEY_ENTER) {
-                        sendMessage('todo:create', {
-                            text: text
-                        });
-                        ev.target.value = '';
-                    }
+            if (text && ev.keyCode === KEY_ESC) {
+                ev.target.value = '';
+            }
+        },
+    };
 
-                    if (text && ev.keyCode === KEY_ESC) {
-                        ev.target.value = '';
-                    }
-                },
-            },
-        }, cfg || {});
+    return function header(id) {
+        return {
+            id: id,
+            vdom_ng: vdom,
+            events: events,
+        };
     };
 }());

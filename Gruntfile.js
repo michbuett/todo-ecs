@@ -26,12 +26,15 @@ module.exports = function (grunt) {
                     'tests/vendor/jquery-2.0.3.js',
                     'tests/vendor/jasmine-jquery.js',
                 ],
+                helpers: [
+                    'tests/helper/map.helper.js',
+                ],
                 specs: [
                     'tests/specs/**/*.js',
                 ],
             },
 
-            debug: {
+            dev: {
                 src: [ 'src/js/todo/**/*.js' ],
 
                 options: {
@@ -40,7 +43,7 @@ module.exports = function (grunt) {
                 }
             },
 
-            all: {
+            coverage: {
                 src: [ 'src/js/todo/**/*.js' ],
 
                 options: {
@@ -73,31 +76,21 @@ module.exports = function (grunt) {
                     }
                 },
             },
-
-            coverage: {
-                src: [ 'src/js/todo/**/*.js' ],
-                options: {
-                    template: require('grunt-template-jasmine-istanbul'),
-                    templateOptions: {
-                        coverage: 'reports/core/coverage.json',
-                        report: 'reports/',
-                        thresholds: {
-                            lines: 85,
-                            statements: 85,
-                            branches: 80,
-                            functions: 90
-                        },
-                    },
-                },
-            },
-
         },
 
         watch: {
             src: {
                 files: ['Gruntfile.js', 'src/**/*', 'tests/**/*'],
-                tasks: ['test'],
+                tasks: ['jshint', 'jasmine:dev'],
             },
+        },
+
+        connect: {
+            dev: {
+                options: {
+                    livereload: true,
+                },
+            }
         },
 
         coveralls: {
@@ -165,17 +158,19 @@ module.exports = function (grunt) {
 
     // load grunt plugins
     grunt.loadNpmTasks('grunt-available-tasks');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-browserify');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-coveralls');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-browserify');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-coveralls');
 
     // define aliases
     grunt.registerTask('default', ['availabletasks']);
-    grunt.registerTask('test', ['jshint', 'jasmine:all']);
+    grunt.registerTask('dev', ['connect', 'watch']);
+    grunt.registerTask('test', ['jshint', 'jasmine:coverage']);
     grunt.registerTask('build', ['test', 'clean', 'browserify', 'uglify', 'copy']);
 };

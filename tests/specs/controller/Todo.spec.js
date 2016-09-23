@@ -32,6 +32,8 @@ describe('todo.controller.Todo', function () {
             expect(newTodo.text).toBe(data.text);
             expect(newTodo.editing).toBe(false);
             expect(newTodo.completed).toBe(false);
+            expect(newState.val('numOfCompleted')).toBe(0);
+            expect(newState.val('numOfUnCompleted')).toBe(1);
         });
     });
 
@@ -84,6 +86,8 @@ describe('todo.controller.Todo', function () {
                 completed: false,
                 editing: false,
             }]);
+            expect(newState.val('numOfCompleted')).toBe(1);
+            expect(newState.val('numOfUnCompleted')).toBe(1);
         });
     });
 
@@ -128,6 +132,8 @@ describe('todo.controller.Todo', function () {
                 completed: false,
                 editing: false,
             }]);
+            expect(newState.val('numOfCompleted')).toBe(0);
+            expect(newState.val('numOfUnCompleted')).toBe(1);
         });
     });
 
@@ -175,6 +181,8 @@ describe('todo.controller.Todo', function () {
                 completed: false,
                 editing: false,
             }]);
+            expect(newState.val('numOfCompleted')).toBe(0);
+            expect(newState.val('numOfUnCompleted')).toBe(1);
         });
     });
 
@@ -226,6 +234,8 @@ describe('todo.controller.Todo', function () {
                 completed: true,
                 editing: true,
             }]);
+            expect(newState.val('numOfCompleted')).toBe(2);
+            expect(newState.val('numOfUnCompleted')).toBe(0);
         });
     });
 
