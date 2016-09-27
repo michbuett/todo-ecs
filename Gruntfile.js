@@ -81,7 +81,7 @@ module.exports = function (grunt) {
         watch: {
             src: {
                 files: ['Gruntfile.js', 'src/**/*', 'tests/**/*'],
-                tasks: ['jshint', 'jasmine:dev'],
+                tasks: ['debug'],
             },
         },
 
@@ -118,6 +118,18 @@ module.exports = function (grunt) {
                 options: {
                     browserifyOptions: {
                         debug: false,
+                    },
+                }
+            },
+
+            dev: {
+                src: [
+                    'src/js/init.js',
+                ],
+                dest: 'build/js/app.min.js',
+                options: {
+                    browserifyOptions: {
+                        debug: true,
                     },
                 }
             },
@@ -172,5 +184,6 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['availabletasks']);
     grunt.registerTask('dev', ['connect', 'watch']);
     grunt.registerTask('test', ['jshint', 'jasmine:coverage']);
-    grunt.registerTask('build', ['test', 'clean', 'browserify', 'uglify', 'copy']);
+    grunt.registerTask('debug', ['jshint', 'jasmine:dev', 'clean', 'browserify:dev', 'copy']);
+    grunt.registerTask('dist', ['test', 'clean', 'browserify:dist', 'uglify', 'copy']);
 };

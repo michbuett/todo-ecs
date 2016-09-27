@@ -12,7 +12,7 @@ module.exports = (function () {
         return {
             id: todo.id,
 
-            vdom_ng: renderVdom(todo, route),
+            vdom: renderVdom(todo, route),
 
             events: {
                 'change input.toggle': function (e, sendMessage) {

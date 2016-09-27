@@ -17,7 +17,7 @@ module.exports = (function () {
         return {
             id: id,
 
-            vdom_ng: renderListVdom(hasTodos, allCompleted, todos),
+            vdom: renderListVdom(hasTodos, allCompleted, todos),
 
             events: {
                 'change .toggle-all': function (e, sendMessage) {

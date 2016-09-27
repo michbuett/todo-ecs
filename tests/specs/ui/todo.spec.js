@@ -162,19 +162,45 @@ describe('todo.ui (Todo)', function () {
             text: 'Foo',
             completed: false,
             editing: false,
+        }, {
+            id: 'bar',
+            text: 'Bar',
+            completed: false,
+            editing: false,
+        }, {
+            id: 'baz',
+            text: 'Baz',
+            completed: false,
+            editing: false,
         }]);
 
         this.messages.on('todo:delete', spy);
         this.ui.update(state);
 
         // execute
-        $('#foo button.destroy').click();
+        $('#bar button.destroy').click();
 
         // verify
         expect(spy).toHaveBeenCalled();
         expect(spy.calls.mostRecent().args[0]).toEqual({
-            id: 'foo',
+            id: 'bar',
         });
+
+        this.ui.update(state.set('todos', [{
+            id: 'foo',
+            text: 'Foo',
+            completed: false,
+            editing: false,
+        }, {
+            id: 'baz',
+            text: 'Baz',
+            completed: false,
+            editing: false,
+        }]));
+
+        expect($('#foo')).toHaveText('Foo');
+        expect($('#bar')).not.toExist();
+        expect($('#baz')).toHaveText('Baz');
     });
 
     it('allows to change the todo text', function () {

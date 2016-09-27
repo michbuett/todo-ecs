@@ -4,9 +4,9 @@ module.exports = (function () {
     var coquoVenenum = require('coquo-venenum');
 
     var Delegatus = require('alchemy.js/lib/Delegatus');
-    var Administrator = require('alchemy.js/lib/AdministratorNG');
-    var EventSystem = require('alchemy.js/lib/EventSystemNG');
-    var VDomRenderSystem = require('alchemy.js/lib/VDomRenderSystemNG');
+    var Administrator = require('alchemy.js/lib/Administrator');
+    var EventSystem = require('alchemy.js/lib/EventSystem');
+    var VDomRenderSystem = require('alchemy.js/lib/VDomRenderSystem');
 
     var viewport = require('./entities/Viewport');
 

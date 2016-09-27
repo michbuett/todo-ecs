@@ -13,7 +13,7 @@ module.exports = (function () {
         return {
             id: id,
 
-            vdom_ng: renderVdom(
+            vdom: renderVdom(
                 numOfCompleted.val(),
                 numOfUnCompleted.val(),
                 route.val()

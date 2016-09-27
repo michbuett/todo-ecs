@@ -14,7 +14,7 @@ module.exports = (function () {
         return {
             id: 'viewport',
 
-            vdom_ng: vdom,
+            vdom: vdom,
 
             children: [
                 header('header'),

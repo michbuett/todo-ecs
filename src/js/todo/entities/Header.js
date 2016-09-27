@@ -34,7 +34,7 @@ module.exports = (function () {
     return function header(id) {
         return {
             id: id,
-            vdom_ng: vdom,
+            vdom: vdom,
             events: events,
         };
     };
