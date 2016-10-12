@@ -58,6 +58,6 @@ module.exports = (function () {
 
     /** @private */
     function renderTodoVdom(todo) {
-        return h('#' + todo.id);
+        return h('li#' + todo.id);
     }
 }());

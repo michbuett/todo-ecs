@@ -1,7 +1,7 @@
 module.exports = (function () {
     'use strict';
 
-    var header = require('./Header');
+    var header = require('./Header')('header');
     var todoList = require('./TodoList');
     var footer = require('./Footer');
     var h = require('virtual-dom/h');
@@ -17,7 +17,7 @@ module.exports = (function () {
             vdom: vdom,
 
             children: [
-                header('header'),
+                header,
 
                 todoList('todos', state.sub('todos'), state.sub('route')),
 

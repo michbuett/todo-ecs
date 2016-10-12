@@ -1,9 +1,45 @@
 module.exports = (function () {
     'use strict';
 
+    var memoize = require('@michbuett/f/memoize2');
     var h = require('virtual-dom/h');
+    var events = {
+        'change input.toggle': function (e, sendMessage) {
+            var checked = e && e.target && e.target.checked;
+            var todoId = getTodoId(e.target);
 
-    return function Todo(todo, route) {
+            sendMessage('todo:update', {
+                id: todoId,
+                completed: checked
+            });
+        },
+
+        'dblclick .uncompleted label': function (e, sendMessage) {
+            sendMessage('todo:update', {
+                id: getTodoId(e.target),
+                editing: true,
+            });
+        },
+
+        'click button.destroy': function (e, sendMessage) {
+            sendMessage('todo:delete', {
+                id: getTodoId(e.target),
+            });
+        },
+
+        'change .uncompleted input.edit': function (e, sendMessage) {
+            var newText = e && e.target && e.target.value;
+            if (newText) {
+                sendMessage('todo:update', {
+                    id: getTodoId(e.target),
+                    text: newText,
+                    editing: false,
+                });
+            }
+        }
+    };
+
+    return memoize(function (todo, route) {
 
         /**
          * @class
@@ -14,42 +50,11 @@ module.exports = (function () {
 
             vdom: renderVdom(todo, route),
 
-            events: {
-                'change input.toggle': function (e, sendMessage) {
-                    var checked = e && e.target && e.target.checked;
-                    sendMessage('todo:update', {
-                        id: todo.id,
-                        completed: checked
-                    });
-                },
-
-                'dblclick .uncompleted label': function (e, sendMessage) {
-                    sendMessage('todo:update', {
-                        id: todo.id,
-                        editing: true,
-                    });
-                },
-
-                'click button.destroy': function (e, sendMessage) {
-                    sendMessage('todo:delete', {
-                        id: todo.id,
-                    });
-                },
-
-                'change .uncompleted input.edit': function (e, sendMessage) {
-                    var newText = e && e.target && e.target.value;
-                    if (newText) {
-                        sendMessage('todo:update', {
-                            id: todo.id,
-                            text: newText,
-                            editing: false,
-                        });
-                    }
-                }
-            }
+            events: events,
         };
-    };
+    });
 
+    /** @private */
     function renderVdom(data, route) {
         var completed = data.completed;
         var editing = data.editing;
@@ -61,7 +66,10 @@ module.exports = (function () {
         }
 
         return h('li', {
-            className: className
+            className: className,
+            dataset: {
+                todoId: data.id
+            },
         }, [
             h('div.view', null, [
                 h('input.toggle', {
@@ -78,5 +86,15 @@ module.exports = (function () {
                 value: text,
             })
         ]);
+    }
+
+    /** @private */
+    function getTodoId(el) {
+        if (!el) {
+            return;
+        }
+
+        var todoId = el.dataset && el.dataset.todoId;
+        return todoId || getTodoId(el.parentElement);
     }
 }());
