@@ -27,7 +27,7 @@ module.exports = function (grunt) {
                     'tests/vendor/jasmine-jquery.js',
                 ],
                 helpers: [
-                    'tests/helper/map.helper.js',
+                    'tests/helper/event.helper.js',
                 ],
                 specs: [
                     'tests/specs/**/*.js',

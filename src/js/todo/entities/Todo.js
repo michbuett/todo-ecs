@@ -3,8 +3,8 @@ module.exports = (function () {
 
     var memoize = require('@michbuett/f/memoize2');
     var h = require('virtual-dom/h');
-    var events = {
-        'change input.toggle': function (e, sendMessage) {
+    var events = [
+        ['change', 'input.toggle', function (e, sendMessage) {
             var checked = e && e.target && e.target.checked;
             var todoId = getTodoId(e.target);
 
@@ -12,22 +12,22 @@ module.exports = (function () {
                 id: todoId,
                 completed: checked
             });
-        },
+        }],
 
-        'dblclick .uncompleted label': function (e, sendMessage) {
+        ['dblclick', '.uncompleted label', function (e, sendMessage) {
             sendMessage('todo:update', {
                 id: getTodoId(e.target),
                 editing: true,
             });
-        },
+        }],
 
-        'click button.destroy': function (e, sendMessage) {
+        ['click', 'button.destroy', function (e, sendMessage) {
             sendMessage('todo:delete', {
                 id: getTodoId(e.target),
             });
-        },
+        }],
 
-        'change .uncompleted input.edit': function (e, sendMessage) {
+        ['change', '.uncompleted input.edit', function (e, sendMessage) {
             var newText = e && e.target && e.target.value;
             if (newText) {
                 sendMessage('todo:update', {
@@ -36,8 +36,8 @@ module.exports = (function () {
                     editing: false,
                 });
             }
-        }
-    };
+        }]
+    ];
 
     return memoize(function (todo, route) {
 

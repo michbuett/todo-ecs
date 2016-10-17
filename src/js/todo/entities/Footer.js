@@ -3,11 +3,11 @@ module.exports = (function () {
 
     var h = require('virtual-dom/h');
 
-    var events = {
-        'click .clear-completed': function (e, sendMessage) {
+    var events = [
+        ['click', '.clear-completed', function (e, sendMessage) {
             sendMessage('todo:deletecompleted');
-        },
-    };
+        },]
+    ];
 
     return function footer(id, numOfCompleted, numOfUnCompleted, route) {
         return {

@@ -19,13 +19,13 @@ module.exports = (function () {
 
             vdom: renderListVdom(hasTodos, allCompleted, todos),
 
-            events: {
-                'change .toggle-all': function (e, sendMessage) {
+            events: [
+                ['change', '.toggle-all', function (e, sendMessage) {
                     sendMessage('todo:updateall', {
                         completed: !allCompleted,
                     });
-                },
-            },
+                }],
+            ],
 
             children: todos.map(function (t) {
                 return todo(t, route.val());

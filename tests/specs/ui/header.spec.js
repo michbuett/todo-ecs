@@ -1,4 +1,4 @@
-/* global $ */
+/* global $, EventHelper */
 describe('todo.ui (Header)', function () {
     'use strict';
 
@@ -23,15 +23,13 @@ describe('todo.ui (Header)', function () {
 
     it('allows to create new ToDos when pressing [RETURN]', function () {
         // prepare
-        var e = $.Event('keydown');
-        e.keyCode = 13; // [RETURN]
         var spy = jasmine.createSpy();
         this.messages.on('todo:create', spy);
         this.ui.update(this.state);
 
         // execute
         $('.new-todo').val('test');
-        $('.new-todo').trigger(e);
+        EventHelper.pressEnter('keydown', '.new-todo');
 
         // verify
         expect(spy).toHaveBeenCalled();
@@ -39,15 +37,13 @@ describe('todo.ui (Header)', function () {
 
     it('clears the input element when pressing [ESC]', function () {
         // prepare
-        var e = $.Event('keydown');
-        e.keyCode = 27; // # Some key code value
         var spy = jasmine.createSpy();
         this.messages.on('todo:create', spy);
         this.ui.update(this.state);
 
         // execute
         $('.new-todo').val('test');
-        $('.new-todo').trigger(e);
+        EventHelper.pressEsc('keydown', '.new-todo');
 
         // verify
         expect(spy).not.toHaveBeenCalled();

@@ -1,4 +1,4 @@
-/* global $ */
+/* global $, EventHelper */
 describe('todo.ui (Todo)', function () {
     'use strict';
 
@@ -124,7 +124,7 @@ describe('todo.ui (Todo)', function () {
         this.ui.update(state);
 
         // execute
-        $('#foo label').dblclick();
+        EventHelper.dblclick('#foo label');
 
         // verify
         expect(spy).toHaveBeenCalled();
@@ -148,7 +148,7 @@ describe('todo.ui (Todo)', function () {
         this.ui.update(state);
 
         // execute
-        $('#foo label').dblclick();
+        EventHelper.dblclick('#foo label');
 
         // verify
         expect(spy).not.toHaveBeenCalled();
@@ -218,7 +218,7 @@ describe('todo.ui (Todo)', function () {
 
         // execute
         $('#foo input.edit').val('New Foo Text');
-        $('#foo input.edit').change();
+        EventHelper.change('#foo input.edit');
 
         // verify
         expect(spy).toHaveBeenCalled();

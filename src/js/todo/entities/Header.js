@@ -1,9 +1,6 @@
 module.exports = (function () {
     'use strict';
 
-    var KEY_ENTER = 13;
-    var KEY_ESC = 27;
-
     var h = require('virtual-dom/h');
 
     var vdom = h('header.header', null, [
@@ -14,22 +11,22 @@ module.exports = (function () {
         }, '')
     ]);
 
-    var events = {
-        'keydown .new-todo': function (ev, sendMessage) {
+    var events = [
+        ['keydown', '.new-todo', function (ev, sendMessage) {
             var text = ev.target && ev.target.value;
 
-            if (text && ev.keyCode === KEY_ENTER) {
+            if (text && ev.key === 'Enter') {
                 sendMessage('todo:create', {
                     text: text
                 });
                 ev.target.value = '';
             }
 
-            if (text && ev.keyCode === KEY_ESC) {
+            if (text && ev.key === 'Escape') {
                 ev.target.value = '';
             }
-        },
-    };
+        }],
+    ];
 
     return function header(id) {
         return {
